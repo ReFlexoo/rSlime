@@ -78,12 +78,3 @@ on damage:
 	if {slime.%victim%} is set:
 		cancel event
 		delete {slime.%victim%}
-on place:
-	if player's tool is 165:
-		cancel event
-		set {_block.slime} to event-block's location
-		remove 1 y-coordinate from {_block.slime}
-		remove 1 165 from the player's inventory
-		set block at {_block.slime}'s location to 165
-		delete {_block.slime}
-		stop
