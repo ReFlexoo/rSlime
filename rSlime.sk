@@ -1,0 +1,89 @@
+#
+# Developer of skript: ReFlexoo
+# Version: 1.1
+#
+# permission all: rSlime.all
+#
+
+command /rslime [<text>] [<text>]:
+	trigger:
+		if player has permission "rslime.all":
+			if arg 1 is not set:
+				player command "rslime ajuda"
+				stop
+			if arg 1 is "ajuda":
+				send ""
+				send "&eAjuda"
+				send ""
+				send "&2/rslime adicionar &7[mundo]"
+				send "&2/rslime remover &7[mundo]"
+				send "&2/rslime list"
+				send "&2/rslime clear &7[Limpar a lista]"
+				send ""
+				stop
+			if arg 1 is "add" or "adicionar":
+				if arg 2 is set:
+					if {mundo.slime.%arg 2%} is not set:
+						send "&amundo adicionado com sucesso!"
+						set {mundo.slime.%arg 2%} to "%arg 2%"
+						add arg 2 to {mundo.slime::*}
+						stop
+					else:
+						send "&cEste mundo já foi adicionado."
+						stop
+				else:
+					send "&cErro! cite um mundo para adicionar na lista de mundos permitidos para o uso de slimes"
+					stop
+			if arg 1 is "remove" or "remover":
+				if arg 2 is set:
+					if {mundo.slime.%arg 2%} is set:
+						send "&cO mundo foi removido da lista."
+						delete {mundo.slime.%arg 2%}
+						remove arg 2 from {mundo.slime::*}
+						stop
+					else:
+						send "&cEste mundo não foi adicionado."
+						stop
+				else:
+					send "&cErro! cite um mundo para remover da lista de mundos permitidos para o uso de slimes"
+					stop
+			if arg 1 is "list":
+				if amount of {mundo.slime::*} > 0:
+					send "&2Encontrado: %amount of {mundo.slime::*}%"
+					loop {mundo.slime::*}:
+						send "&1* &7%loop-value%"
+				else:
+					send "&cNada encontrado"
+					stop
+			if arg 1 is "clear":
+				send "&aVocê limpou a lista de slime"
+				clear {mundo.slime::*}
+				stop
+		else:
+			send ""
+			send "&fSkript: &2rSlime &7[1.1]"
+			send "&fCriadores: &7ReFlexoo &fe &7uDiego" to player
+			send ""
+			send json "&eClique &lAQUI &epara adquirir!" open "https://discord.gg/Sse8V34TeV" to player
+			send ""
+			stop
+on step on 165:
+	loop {mundo.slime::*}:
+		if player's world is "%loop-value%":
+			push the player upwards at speed 1.6
+			push the player forwards at speed 0.6
+			set {slime.%player%} to true
+on damage:
+	damage cause is fall:
+	if {slime.%victim%} is set:
+		cancel event
+		delete {slime.%victim%}
+on place:
+	if player's tool is 165:
+		cancel event
+		set {_block.slime} to event-block's location
+		remove 1 y-coordinate from {_block.slime}
+		remove 1 165 from the player's inventory
+		set block at {_block.slime}'s location to 165
+		delete {_block.slime}
+		stop
