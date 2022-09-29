@@ -1,5 +1,9 @@
 # rSlime
 
+Skript de slime por mundos.
+
+Versão: 1.1
+
 **Comandos:**
 
 - /rSlime adicionar [Mundo]
